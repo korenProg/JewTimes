@@ -1,16 +1,351 @@
 .home {
-  text-align: center;
+  min-height: 100vh;
+  width: 100%;
   padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  direction: rtl;
+  font-family: 'Noto Sans Hebrew', sans-serif;
 }
 
-.home h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: #282c34;
+.home-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: white;
 }
 
-.home p {
+.home-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.home-subtitle {
   font-size: 1.2rem;
-  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Card Base Styles */
+.time-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.time-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1E56A0;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 1rem;
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Holiday Card */
+.holiday-name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #667eea;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  color: white;
+}
+
+.countdown-number {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.countdown-label {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.dates-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.date-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.date-label {
+  font-weight: 600;
   color: #666;
+}
+
+.date-value {
+  font-weight: 700;
+  color: #1E56A0;
+}
+
+/* Shabbat Card */
+.parasha-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #764ba2;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.shabbat-date {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.shabbat-times {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.time-row:hover {
+  background: #e9ecef;
+}
+
+.time-icon {
+  font-size: 2rem;
+}
+
+.time-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time-label {
+  font-weight: 600;
+  color: #666;
+}
+
+.time-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1E56A0;
+}
+
+.time-divider {
+  height: 1px;
+  background: #dee2e6;
+  margin: 0.5rem 0;
+}
+
+/* Calendar Card */
+.calendar-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 2rem 0;
+}
+
+.calendar-description {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.open-calendar-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Noto Sans Hebrew', sans-serif;
+}
+
+.open-calendar-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.calendar-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.calendar-header h3 {
+  color: #1E56A0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.close-calendar-btn {
+  background: #f0f0f0;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.close-calendar-btn:hover {
+  background: #e0e0e0;
+}
+
+.holidays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-left: 0.5rem;
+}
+
+.holidays-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.holidays-list::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.holidays-list::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 10px;
+}
+
+.holiday-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.holiday-item:hover {
+  background: #e9ecef;
+  transform: translateX(-5px);
+}
+
+.holiday-item-icon {
+  font-size: 1.5rem;
+}
+
+.holiday-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.holiday-item-name {
+  font-weight: 600;
+  color: #1E56A0;
+  font-size: 1.1rem;
+}
+
+.holiday-item-date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .home {
+    padding: 1rem;
+  }
+
+  .home-title {
+    font-size: 2rem;
+  }
+
+  .home-subtitle {
+    font-size: 1rem;
+  }
+
+  .cards-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .countdown-number {
+    font-size: 3rem;
+  }
 }
