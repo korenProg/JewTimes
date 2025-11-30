@@ -15,7 +15,6 @@ const Header = () => {
           
           <nav className="nav-menu">
             <Link to="/" className="nav-link">ראשי</Link>
-            <Link to="/times" className="nav-link">זמני תפילה</Link>
             <Link to="/calendar" className="nav-link">לוח שנה</Link>
             <Link to="/about" className="nav-link">אודות</Link>
           </nav>

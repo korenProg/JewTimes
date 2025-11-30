@@ -1,0 +1,97 @@
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.3rem;
+  position: relative;
+  min-height: 50px;
+}
+
+.calendar-day:not(.empty):hover {
+  background: #e9ecef;
+  transform: scale(1.05);
+}
+
+.calendar-day.empty {
+  background: transparent;
+  cursor: default;
+}
+
+.calendar-day.today {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 700;
+}
+
+.calendar-day.selected {
+  background: #1e56a0;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(30, 86, 160, 0.3);
+}
+
+.calendar-day.weekend {
+  background: #fef3f3;
+}
+
+.calendar-day.weekend.today,
+.calendar-day.weekend.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.calendar-day.has-event {
+  font-weight: 600;
+}
+
+.calendar-day.shabbat:not(.today):not(.selected) {
+  background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+  border: 2px solid #764ba2;
+}
+
+.calendar-day.holiday:not(.today):not(.selected) {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border: 2px solid #667eea;
+}
+
+.gregorian-date {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.event-indicator {
+  position: absolute;
+  bottom: 2px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 968px) {
+  .calendar-day {
+    min-height: 45px;
+    padding: 0.2rem;
+  }
+
+  .gregorian-date {
+    font-size: 0.85rem;
+  }
+
+  .event-indicator {
+    font-size: 0.8rem;
+  }
+}

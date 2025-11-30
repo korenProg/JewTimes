@@ -1,145 +1,174 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Home.css";
+import { useShabbatTimes, useHolidays } from "../../hooks";
+import CitySelector, { cities } from "../../components/features/citySelector/citySelector";
+import { useNavigate } from "react-router-dom"; // הוסף את זה
 
 const Home = () => {
-  const [showCalendar, setShowCalendar] = useState(false);
+  const navigate = useNavigate(); // הוסף את זה
+  
+  // ניהול העיר הנבחרת - שמירה ב-localStorage
+  const [selectedCity, setSelectedCity] = useState(() => {
+    const saved = localStorage.getItem('selectedCity');
+    return saved ? parseInt(saved) : 294071; // כפר סבא כברירת מחדל
+  });
 
-  // Sample data - you'll replace this with real API data later
-  const nextHoliday = {
-    name: "חנוכה",
-    hebrewDate: "כ״ה כסלו",
-    gregorianDate: "25 דצמבר 2024",
-    daysUntil: 31
+  // שמירת העיר ב-localStorage כשהיא משתנה
+  useEffect(() => {
+    localStorage.setItem('selectedCity', selectedCity.toString());
+  }, [selectedCity]);
+
+  // מציאת פרטי העיר הנוכחית
+  const currentCityData = cities.find(c => c.id === selectedCity) || cities[0];
+  
+  // שימוש ב-hooks עם העיר הנבחרת ודקות הדלקת נרות המתאימות
+  const { shabbatData, loading: shabbatLoading, error: shabbatError } = useShabbatTimes(
+    selectedCity, 
+    currentCityData.candleMinutes
+  );
+  const { holidays, nextHoliday, loading: holidaysLoading, error: holidaysError } = useHolidays(
+    2025, 
+    selectedCity
+  );
+
+  const handleCityChange = (city) => {
+    setSelectedCity(city.id);
   };
 
-  const shabbat = {
-    parasha: "פרשת וַיֵּצֵא",
-    candleLighting: "16:15",
-    havdalah: "17:30",
-    date: "29 נובמבר 2024"
-  };
+  // טיפול במצבי loading
+  if (shabbatLoading || holidaysLoading) {
+    return (
+      <div className="home">
+        <div className="home-header">
+          <h1 className="home-title">זמנים יהודיים</h1>
+          <p className="home-subtitle">טוען נתונים...</p>
+        </div>
+      </div>
+    );
+  }
 
-  const holidays = [
-    { name: "חנוכה", date: "כ״ה כסלו", gregorian: "25 דצמבר" },
-    { name: "פורים", date: "י״ד אדר", gregorian: "14 מרץ" },
-    { name: "פסח", date: "ט״ו ניסן", gregorian: "13 אפריל" },
-    { name: "שבועות", date: "ו׳ סיוון", gregorian: "2 יוני" },
-    { name: "ראש השנה", date: "א׳ תשרי", gregorian: "23 ספטמבר" },
-    { name: "יום כיפור", date: "י׳ תשרי", gregorian: "2 אוקטובר" },
-    { name: "סוכות", date: "ט״ו תשרי", gregorian: "7 אוקטובר" },
-  ];
+  // טיפול בשגיאות
+  if (shabbatError || holidaysError) {
+    return (
+      <div className="home">
+        <div className="home-header">
+          <h1 className="home-title">זמנים יהודיים</h1>
+          <p className="home-subtitle" style={{ color: 'red' }}>
+            שגיאה בטעינת הנתונים: {shabbatError || holidaysError}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="home">
       <div className="home-header">
         <h1 className="home-title">זמנים יהודיים</h1>
         <p className="home-subtitle">כל המידע על זמני תפילה, פרשיות וחגים במקום אחד</p>
+        
+        {/* בורר עיר */}
+        <CitySelector 
+          selectedCity={selectedCity}
+          onCityChange={handleCityChange}
+        />
       </div>
 
       <div className="cards-container">
         {/* Holiday Card */}
-        <div className="time-card holiday-card">
-          <div className="card-icon">📅</div>
-          <h2 className="card-title">החג הקרוב</h2>
-          
-          <div className="card-content">
-            <h3 className="holiday-name">{nextHoliday.name}</h3>
+        {nextHoliday && (
+          <div className="time-card holiday-card">
+            <div className="card-icon">📅</div>
+            <h2 className="card-title">החג הקרוב</h2>
             
-            <div className="countdown">
-              <span className="countdown-number">{nextHoliday.daysUntil}</span>
-              <span className="countdown-label">ימים</span>
-            </div>
-
-            <div className="dates-info">
-              <div className="date-row">
-                <span className="date-label">תאריך עברי:</span>
-                <span className="date-value">{nextHoliday.hebrewDate}</span>
+            <div className="card-content">
+              <h3 className="holiday-name">{nextHoliday.name}</h3>
+              
+              <div className="countdown">
+                <span className="countdown-number">{nextHoliday.daysUntil}</span>
+                <span className="countdown-label">ימים</span>
               </div>
-              <div className="date-row">
-                <span className="date-label">תאריך לועזי:</span>
-                <span className="date-value">{nextHoliday.gregorianDate}</span>
+
+              <div className="dates-info">
+                <div className="date-row">
+                  <span className="date-label">תאריך עברי:</span>
+                  <span className="date-value">{nextHoliday.hebrewDate}</span>
+                </div>
+                <div className="date-row">
+                  <span className="date-label">תאריך לועזי:</span>
+                  <span className="date-value">{nextHoliday.gregorianDate}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Shabbat Card */}
-        <div className="time-card shabbat-card">
-          <div className="card-icon">🕯️</div>
-          <h2 className="card-title">שבת הקרובה</h2>
-          
-          <div className="card-content">
-            <h3 className="parasha-name">{shabbat.parasha}</h3>
+        {shabbatData && (
+          <div className="time-card shabbat-card">
+            <div className="card-icon">🕯️</div>
+            <h2 className="card-title">שבת הקרובה</h2>
             
-            <div className="shabbat-date">{shabbat.date}</div>
+            <div className="card-content">
+              <h3 className="parasha-name">{shabbatData.parasha}</h3>
+              
+              <div className="shabbat-date">{shabbatData.date}</div>
 
-            <div className="shabbat-times">
-              <div className="time-row candles">
-                <div className="time-icon">🕯️</div>
-                <div className="time-info">
-                  <span className="time-label">הדלקת נרות</span>
-                  <span className="time-value">{shabbat.candleLighting}</span>
+              <div className="shabbat-times">
+                <div className="time-row candles">
+                  <div className="time-icon">🕯️</div>
+                  <div className="time-info">
+                    <span className="time-label">הדלקת נרות</span>
+                    <span className="time-value">{shabbatData.candleLighting}</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="time-divider"></div>
+                <div className="time-divider"></div>
 
-              <div className="time-row havdalah">
-                <div className="time-icon">⭐</div>
-                <div className="time-info">
-                  <span className="time-label">צאת השבת</span>
-                  <span className="time-value">{shabbat.havdalah}</span>
+                <div className="time-row havdalah">
+                  <div className="time-icon">⭐</div>
+                  <div className="time-info">
+                    <span className="time-label">צאת השבת</span>
+                    <span className="time-value">{shabbatData.havdalah}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Calendar Card */}
-        <div className="time-card calendar-card">
+        {/* Calendar Card - עכשיו כפתור שמוביל לעמוד נפרד */}
+        <div 
+          className="time-card calendar-card clickable-card"
+          onClick={() => navigate('/calendar')}
+        >
           <div className="card-icon">📆</div>
-          <h2 className="card-title">לוח חגים</h2>
+          <h2 className="card-title">לוח שנה עברי</h2>
           
           <div className="card-content">
-            {!showCalendar ? (
-              <div className="calendar-preview">
-                <p className="calendar-description">
-                  צפו בלוח השנה המלא עם כל החגים והמועדים
-                </p>
-                <button 
-                  className="open-calendar-btn"
-                  onClick={() => setShowCalendar(true)}
-                >
-                  פתח לוח שנה
-                </button>
-              </div>
-            ) : (
-              <div className="calendar-view">
-                <div className="calendar-header">
-                  <h3>חגים ומועדים תשפ״ה</h3>
-                  <button 
-                    className="close-calendar-btn"
-                    onClick={() => setShowCalendar(false)}
-                  >
-                    ✕
-                  </button>
+            <div className="calendar-preview">
+              <p className="calendar-description">
+                לוח שנה מלא עם תאריכים עברים ולועזיים, חגים ומועדים
+              </p>
+              <div className="calendar-features">
+                <div className="feature-item">
+                  <span className="feature-icon">📅</span>
+                  <span>תאריכים עברים</span>
                 </div>
-                
-                <div className="holidays-list">
-                  {holidays.map((holiday, index) => (
-                    <div key={index} className="holiday-item">
-                      <div className="holiday-item-icon">🎉</div>
-                      <div className="holiday-item-info">
-                        <span className="holiday-item-name">{holiday.name}</span>
-                        <span className="holiday-item-date">
-                          {holiday.date} • {holiday.gregorian}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+                <div className="feature-item">
+                  <span className="feature-icon">🎉</span>
+                  <span>חגים ומועדים</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">🕯️</span>
+                  <span>שבתות ומנוחה</span>
                 </div>
               </div>
-            )}
+              <div className="open-calendar-btn">
+                <span>פתח לוח שנה</span>
+                <span className="arrow">←</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

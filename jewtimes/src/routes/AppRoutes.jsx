@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Loading from '../components/common/Loading';
 import PrivateRoute from './PrivateRoute';
+import Calendar from '../pages/Calendar';
 
 // Lazy load pages
 const Home = lazy(() => import('../pages/Home'));
@@ -16,7 +17,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/calendar" element={<Calendar />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
